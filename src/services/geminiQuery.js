@@ -1,27 +1,23 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// src/services/geminiQuery.js
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+export async function queryMaterialInfo(input, materials) {
+  // Chuẩn hóa mã vật liệu nhập vào
+  const query = input.trim().toUpperCase();
 
-// ✅ Truyền dữ liệu kho vào AI và yêu cầu nó tìm đúng mã vật tư
-export async function queryMaterialInfo(prompt, materials) {
-  const materialText = materials
-    .map(
-      (m) =>
-        `Vị trí: ${m.position}, Mã vật liệu: ${m.code}, Size: ${m.size}, Số lượng: ${m.quantity}, Ngày GR: ${m.date}`
-    )
-    .join("\n");
+  // Tìm vật tư có mã khớp
+  const found = materials.find((m) => m.code.toUpperCase() === query);
 
-  const fullPrompt = `
-Dưới đây là danh sách vật tư trong kho:
-${materialText}
+  if (!found) {
+    return `❌ Không tìm thấy mã vật tư "${query}" trong kho.`;
+  }
 
-Người dùng hỏi: "${prompt}"
-
-→ Trả lời lại đúng 1 dòng vật tư có mã trùng, với đủ thông tin:
-Vị trí | Mã vật liệu | Size | Số lượng | Ngày GR
-`;
-
-  const result = await model.generateContent(fullPrompt);
-  return result.response.text();
+  // Nếu tìm thấy, trả về thông tin chi tiết
+  return (
+    `✅ Thông tin vật tư:\n` +
+    `• Mã: ${found.code}\n` +
+    `• Vị trí: ${found.position}\n` +
+    `• Size: ${found.size}\n` +
+    `• Số lượng: ${found.quantity}\n` +
+    `• Ngày nhập kho: ${found.date}`
+  );
 }
