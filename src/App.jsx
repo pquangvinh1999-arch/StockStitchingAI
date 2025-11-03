@@ -17,7 +17,7 @@ function App() {
       <InventoryTable data={materials} />
 
       {/* Khu vực AI tra cứu */}
-      <div className="mt-8">
+      <div style={{ marginTop: "50px" }}>
         <ChatAI />
       </div>
     </div>
