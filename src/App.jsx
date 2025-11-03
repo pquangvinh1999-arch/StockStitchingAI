@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <h1>📦 Danh sách vật tư trong kho</h1>
-      {/* Bảng vật tư của mày */}
+      {/* số lượng thực tế */}
       <ChatAI />
     </div>
   );
