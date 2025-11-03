@@ -1,43 +1,36 @@
 import { useState } from "react";
-import { askGemini } from "../services/gemini";
+import { queryMaterialInfo } from "../services/geminiQuery";
+import { materials } from "../data/materials"; // hoặc fetch từ Supabase
 
-export default function ChatAI() {
+export default function AIQueryBox() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [result, setResult] = useState("");
 
-  const handleSend = async () => {
+  const handleQuery = async () => {
     if (!input.trim()) return;
-    const userMsg = { sender: "user", text: input };
-    setMessages([...messages, userMsg]);
-    setInput("");
-    const reply = await askGemini(input);
-    setMessages((prev) => [...prev, { sender: "ai", text: reply }]);
+    setResult("⏳ Đang tìm dữ liệu...");
+    const reply = await queryMaterialInfo(input, materials);
+    setResult(reply);
   };
 
   return (
-    <div className="p-4 max-w-lg mx-auto bg-white shadow-md rounded-xl">
-      <h2 className="text-lg font-bold mb-3">💬 Trợ lý kho hàng (Gemini)</h2>
-      <div className="h-64 overflow-y-auto border p-2 mb-3 bg-gray-50 rounded">
-        {messages.map((msg, i) => (
-          <div key={i} className={msg.sender === "ai" ? "text-blue-600" : "text-black"}>
-            <b>{msg.sender === "ai" ? "Gemini:" : "Bạn:"}</b> {msg.text}
-          </div>
-        ))}
-      </div>
+    <div className="p-4 bg-white shadow-md rounded-xl max-w-xl mx-auto mt-6">
+      <h2 className="text-lg font-bold mb-3">🔍 Bạn cần tìm gì? (Gemini)</h2>
       <div className="flex gap-2">
         <input
           className="border flex-1 p-2 rounded"
+          placeholder="Nhập mã vật liệu (vd: C44080100072)"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Hỏi AI về tồn kho..."
         />
         <button
-          onClick={handleSend}
-          className="bg-blue-500 text-white px-4 rounded hover:bg-blue-600"
+          onClick={handleQuery}
+          className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
         >
-          Gửi
+          Tìm
         </button>
       </div>
+      {result && <div className="mt-4 border p-3 rounded bg-gray-50">{result}</div>}
     </div>
   );
 }
