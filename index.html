@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý kho hàng</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h1>📦 Danh sách vật tư trong kho</h1>
+  <table border="1" cellpadding="8" id="inventoryTable">
+    <thead>
+      <tr>
+        <th>Vị trí</th>
+        <th>Mã vật liệu</th>
+        <th>Size</th>
+        <th>Số lượng</th>
+        <th>Ngày GR</th>
+        <th>QR Code</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const SUPABASE_URL = "DÁN_URL_SUPABASE_VÀO_ĐÂY";
+    const SUPABASE_KEY = "DÁN_PUBLIC_KEY_VÀO_ĐÂY";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadData() {
+      const { data, error } = await supabase.from('inventory_items').select('*');
+      if (error) {
+        alert('Lỗi tải dữ liệu: ' + error.message);
+        return;
+      }
+
+      const tbody = document.querySelector('#inventoryTable tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.vi_tri}</td>
+          <td>${item.ma_vat_lieu}</td>
+          <td>${item.size}</td>
+          <td>${item.so_luong}</td>
+          <td>${item.ngay_gr}</td>
+          <td><a href="${item.qr_code}" target="_blank">Xem QR</a></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
