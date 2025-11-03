@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { queryMaterialInfo } from "../lib/geminiQuery";
+import { materials } from "../data/materials";
 
 export default function ChatAI({ materials }) {
   const [input, setInput] = useState("");
