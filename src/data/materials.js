@@ -1,3 +1,4 @@
+import { queryMaterialInfo } from "../services/geminiQuery";
 export const materials = [
   { viTri: "02-02-03-A", maVatLieu: "R28928300007", size: 10, soLuong: 50000, ngayGR: "23/10/2025" },
   { viTri: "13-01-02-A", maVatLieu: "C4403500001", size: 120, soLuong: 3500, ngayGR: "25/04/2022" },
