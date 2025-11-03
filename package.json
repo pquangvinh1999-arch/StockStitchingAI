@@ -1,5 +1,5 @@
 {
-  "name": "warehouse-ai-app",
+  "name": "Stock-stitching-ai",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
